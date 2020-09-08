@@ -7,31 +7,107 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+  if (n < 0) {
+    return null;
+  }
+
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n - 1);
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
 var sum = function(array) {
+  if (array.length === 0){
+    return 0;
+  }
+
+  return array[0] + sum(array.slice(1));
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
-};
+  if (array.length === 0) {
+    return 0;
+  }
 
+  if (Array.isArray(array[0])) {
+
+    if (array[0].length === 1) {
+      return parseInt(array[0])
+        + arraySum(array.slice(1));
+    }
+
+    if (array[0].length > 1) {
+      return arraySum(array[0]) + arraySum(array.slice(1));
+    }
+  }
+
+  return array[0] + arraySum(array.slice(1));
+}
 // 4. Check if a number is even.
 var isEven = function(n) {
+  n = Math.abs(n);
+
+  if (n === 0) {
+    return true;
+  }
+
+  if (n === 1 ){
+    return false;
+  }
+
+  return isEven(n - 2);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  if (n === 0){
+    return 0;
+  }
+
+  if (n < 0) {
+    return (n + 1) + sumBelow(n + 1);
+  }
+
+  if (n > 0) {
+    return (n - 1) + sumBelow(n - 1);
+  }
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  if (x === y) {
+    return [];
+  }
+
+  if (x > y) {
+    if (x - 1 === y) {
+      return [];
+    }
+
+    var array = [];
+    array.push(x - 1)
+
+    return  array.concat(range(x - 1, y));
+  }
+
+  if (x < y) {
+    if (x + 1 === y) {
+      return [];
+    }
+
+    var array = [];
+    array.push(x + 1)
+
+    return  array.concat(range(x + 1, y));
+  }
 };
 
 // 7. Compute the exponent of a number.
@@ -40,6 +116,22 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  // I: base and exponent
+  // O: Single number
+  // Method: function must call itself
+  // Base case: if exponent is 0 return 1
+  // Mutation: reduce exp keep base the same
+  if(exp === 0){
+    return parseInt(1)
+  }
+
+  if (exp < 0) {
+    return Number(Number.parseFloat(1/base * exponent(base, exp + 1)).toFixed(5));
+  }
+
+  if (exp > 0){
+    return base * exponent(base, exp - 1);
+  }
 };
 
 // 8. Determine if a number is a power of two.
@@ -47,14 +139,56 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+// I: A single number
+// O: A boolean value
+// M: Have the function call itself
+// BC: if n === 1 return true if n === 2 return true
+// Mut: divide by two
+
+  if (n === 1 || n === 2){
+    return true;
+  }
+
+  if (n === 0 || n - Math.floor(n) !== 0){
+    return false;
+  }
+
+  return powerOfTwo(n/2);
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+  if (string.length === 1){
+    return string[0];
+  }
+
+  return string[string.length - 1] + reverse(string.slice(0, string.length - 1));
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  string = string.toLowerCase();
+  string = string.split(' ');
+  string = string.join('').toString();
+
+  if(string.length === 1 ){
+    return true;
+  }
+
+  if(string.length === 2 && string[0] === string[string.length - 1]){
+    return true;
+  } else {
+    if(string.length === 2 && string[0] !== string[string.length - 1]){
+    return false;
+    }
+  }
+
+  if (string.length > 2 && string[0] === string[string.length - 1]){
+    string = string.substring(1, string[string.length - 1]);
+    return palindrome(string);
+  } else {
+    return false;
+  }
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -63,6 +197,8 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+
+
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
