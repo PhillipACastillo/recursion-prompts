@@ -197,19 +197,133 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+  if (x === 0 && y === 0){
+    return NaN;
+  }
+
+  if (x === 0 && y > 0){
+    return 0;
+  }
+
+  if (x === -0 && y > 0){
+    return -0;
+  }
 
 
+  if(x < 0 && y > 0){
+
+    if (x <= -y){
+      x = x + y;
+    }
+
+
+    if (x > -y && x !== -y){
+      return x;
+    }
+
+    return modulo(x, y);
+  }
+
+  if (x < 0 && y < 0){
+    if (x > y){
+      return x;
+    }
+
+    if (x < y){
+      return x = x - y;
+    }
+
+    return modulo(x, y);
+  }
+
+
+  if (x > 0 && y > 0){
+    if (x < y){
+      return x;
+    }
+    x = x - y;
+    return modulo(x, y);
+  }
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
 var multiply = function(x, y) {
+  if(x === 0 || y === 0){
+    return 0;
+  }
+
+  if (x < 0 && y < 0){
+
+    y = y + 1;
+
+    return -x + multiply(x, y);
+  }
+
+  if (x > 0 && y < 0){
+
+    y = y + 1;
+
+    return -x + multiply(x, y);
+  }
+
+  if (x < 0 && y > 0){
+
+    y = y - 1;
+
+    return x + multiply(x, y);
+  }
+
+  if (x > 0 && y > 0){
+
+  y = y - 1;
+
+  return x + multiply(x, y);
+  }
 };
 
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods to arrive at an approximate quotient (ignore decimal endings).
 var divide = function(x, y) {
+  if (x === 0 && y === 0) {
+    return NaN;
+  }
+
+  if (x === 0 || y === 0) {
+    return 0;
+  }
+
+  if (x < 0 && y < 0) {
+
+    if (x > y) {
+    return 0;
+  }
+
+  x = x - y;
+  return 1 + divide(x, y);
+  }
+
+if (x < 0 && y > 0){
+
+  if(x < y){
+    return 0;
+  }
+
+  x = x - y;
+  return 1 + divide(x, y);
+  }
+
+
+if (x > 0 && y > 0){
+  if(x < y){
+    return 0;
+  }
+
+  x = x - y;
+  return 1 + divide(x, y);
+  }
 };
+
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers. The GCD of two
 // integers is the greatest integer that divides both x and y with no remainder.
@@ -217,6 +331,38 @@ var divide = function(x, y) {
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
 var gcd = function(x, y) {
+  if( x === 0 && y === 0) {
+    return 0;
+  }
+
+  if (x < 0 || y < 0) {
+    return null;
+  }
+
+  if (x === 0) {
+    return y;
+  }
+
+  if (y === 0){
+    return x;
+  }
+
+  var small;
+  var modulo;
+
+
+  if (x > y){
+    small = y;
+    modulo = x % y
+  }
+
+  if (y > x){
+    small = x;
+    modulo = y % x;
+  }
+
+  return gcd(small, modulo)
+
 };
 
 // 15. Write a function that compares each character of two strings and returns true if
@@ -224,21 +370,51 @@ var gcd = function(x, y) {
 // compareStr('house', 'houses') // false
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
+
+  if (str1.length === 0 && str2.length === 0){
+    return true;
+  }
+
+  if (str1[0] !== str2[0]){
+    return false;
+  }
+
+  if (str1[0] === str2[0]){
+    str1 = str1.slice(1);
+    str2 = str2.slice(1);
+    return compareStr(str1, str2);
+  }
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function(str) {
+
+    if (str.length === 0) {
+      return [];
+    }
+
+    return [str[0]].concat(createArray(str.slice(1)));
 };
 
 // 17. Reverse the order of an array
 var reverseArr = function(array) {
+  if (array.length === 0) {
+    return [];
+  }
+
+  return [array.pop()].concat(reverseArr(array));
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+  if(length === 0){
+    return [];
+  }
+
+  return [value].concat(buildList(value, length - 1));
 };
 
 // 19. Implement FizzBuzz. Given integer n, return an array of the string representations of 1 to n.
@@ -247,12 +423,42 @@ var buildList = function(value, length) {
 // For numbers which are multiples of both three and five, output “FizzBuzz” instead of the number.
 // fizzBuzz(5) // ['1','2','Fizz','4','Buzz']
 var fizzBuzz = function(n) {
+  var string = '';
+
+  if (n === 1){
+    string += '1';
+    return [string];
+  }
+
+  if (n % 3 === 0){
+   string += 'Fizz'
+  }
+
+  if (n % 5 === 0){
+   string += 'Buzz'
+  }
+
+  if (n % 3 !== 0 && n % 5 !== 0){
+    string += n.toString();
+  }
+
+  return (fizzBuzz(n - 1)).concat([string]);;
 };
 
 // 20. Count the occurence of a value in a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
+  if(array.length === 0){
+    return 0;
+  }
+
+  if (array[0] === value){
+    var sum = 1;
+  } else {
+    var sum = 0;
+  }
+  return sum + countOccurrence(array.slice(1), value);
 };
 
 // 21. Write a recursive version of map.
